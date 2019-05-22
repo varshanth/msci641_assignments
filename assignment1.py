@@ -1,10 +1,8 @@
 from lib.amazon_reviews_loader import AmazonReviewsDS
 from lib.amazon_reviews_cfg import DS_CFG_NO_SW, DS_CFG_SW
 
-
 _POS_REV_FILE = 'dataset/pos.txt'
 _NEG_REV_FILE = 'dataset/neg.txt'
-
 
 def print_ds_info(splits):
     def print_first_n_data(split, n):
@@ -17,8 +15,6 @@ def print_ds_info(splits):
     print_first_n_data(splits["val"], 3)
     print(f'Len(Test): {len(splits["test"][0])}')
     print_first_n_data(splits["test"], 3)
-
-
 
 if __name__ ==  '__main__':
     print('Retrieving Amazon Reviews Dataset with No Stopwords')
