@@ -41,7 +41,6 @@ class AmazonReviewsDS:
 
     def _tokenize(self):
         print('Tokenizing the data')
-        self.data = list(map(lambda review: re.sub('[^\w\-\'\.,\s]', '', review), self.data))
         self.data = list(map(
             lambda review: re.findall('[a-zA-Z]+|[0-9]+|[\.\'\-_,]+', review), self.data))
 
