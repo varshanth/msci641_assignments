@@ -12,12 +12,12 @@ class AmazonReviewsDS:
 
         print(f'Loading Positive Reviews from {pos_text_file}')
         with open(pos_text_file, 'r') as p_txt:
-            pos_reviews = p_txt.read().split('\n')[:-1]
+            pos_reviews = [review.lower() for review in p_txt.read().split('\n')[:-1]]
         assert pos_reviews != None, 'Positive Reviews Load Failed'
 
         print(f'Loading Negative Reviews from {pos_text_file}')
         with open(neg_text_file, 'r') as n_txt:
-            neg_reviews = n_txt.read().split('\n')[:-1]
+            neg_reviews = [review.lower() for review in n_txt.read().split('\n')[:-1]]
         assert neg_reviews != None, 'Negative Reviews Load Failed'
         self.ds_cfg = ds_cfg
 
@@ -35,10 +35,8 @@ class AmazonReviewsDS:
 
     def _tokenize(self):
         print('Tokenizing the data')
-        self.data = np.array(list(map(lambda string: string.split(), self.data)))
-        self.data = np.array(list(
-                list(map(lambda token: re.sub('[^\w\-\']', '', token), review))
-                for review in self.data))
+        self.data = np.array(list(map(
+            lambda review: re.findall('[a-zA-Z]+|[0-9]+|[\.\'\-_,]+', review), self.data)))
 
     def _remove_stop_words(self):
         print('Removing stop words')
