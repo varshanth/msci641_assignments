@@ -15,7 +15,7 @@ class AmazonReviewsDS:
             pos_reviews = [review.lower() for review in p_txt.read().split('\n')[:-1]]
         assert pos_reviews != None, 'Positive Reviews Load Failed'
 
-        print(f'Loading Negative Reviews from {pos_text_file}')
+        print(f'Loading Negative Reviews from {neg_text_file}')
         with open(neg_text_file, 'r') as n_txt:
             neg_reviews = [review.lower() for review in n_txt.read().split('\n')[:-1]]
         assert neg_reviews != None, 'Negative Reviews Load Failed'
