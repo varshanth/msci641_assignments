@@ -2,18 +2,16 @@
 
 ## Result:
 
+### Alpha Hyperparameter Tuning
 Best Alpha for Without Stopwords: 0.8  
 Best Alpha for With Stopwords: 0.4  
 
---------------------------------------------------  
-With Stopwords:  
---------------------------------------------------  
+### Accuracy With Stopwords:  
 Unigrams: 0.8068125  
 Bigrams: 0.82605  
 Unigrams+Bigrams: 0.8336375  
---------------------------------------------------  
-Without Stopwords:  
---------------------------------------------------  
+
+### Accuracy Without Stopwords:  
 Unigrams: 0.8041  
 Bigrams: 0.791375  
 Unigrams+Bigrams: 0.82225  
