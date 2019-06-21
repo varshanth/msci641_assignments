@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 from gensim import models
@@ -15,6 +15,10 @@ from tensorflow.keras.layers import Input, Dense, Embedding, Dropout, Flatten, A
 from tensorflow.keras.preprocessing.text import text_to_word_sequence, Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
+from tensorflow.keras.regularizers import l2
+from sklearn.model_selection import GridSearchCV
+from copy import copy
  
 _POS_REV_FILE = 'dataset/pos.txt'
 _NEG_REV_FILE = 'dataset/neg.txt'
@@ -23,19 +27,19 @@ _MAX_VOCAB_SIZE = 20000
 _EMBEDDING_DIM = 300
 
 
-# In[2]:
+# In[ ]:
 
 
 amazon_rev_sw = AmazonReviewsDS(_POS_REV_FILE, _NEG_REV_FILE, DS_CFG_SW)
 
 
-# In[3]:
+# In[ ]:
 
 
 _max_len_sentence = int(np.percentile([len(rev) for rev in amazon_rev_sw.data], 90))
 
 
-# In[4]:
+# In[ ]:
 
 
 print('Fitting Tokenizer on Dataset')
@@ -45,7 +49,7 @@ X = tokenizer.texts_to_sequences([' '.join(rev[:_max_len_sentence]) for rev in a
 X = pad_sequences(X, maxlen=_max_len_sentence, padding='post', truncating='post')
 
 
-# In[5]:
+# In[ ]:
 
 
 print('Splitting Dataset into Train, Val & Test')
@@ -53,7 +57,7 @@ X_train, X_val_test, y_train, y_val_test = train_test_split(X, amazon_rev_sw.lab
 X_val, X_test, y_val, y_test = train_test_split(X_val_test, y_val_test, random_state=10, test_size=0.5)
 
 
-# In[6]:
+# In[ ]:
 
 
 print('Creating local embeddings matrix from Word2Vec Embeddings')
@@ -72,46 +76,84 @@ for word, i in tokenizer.word_index.items(): # i=0 is the embedding for the zero
 del word2vec_embeddings
 
 
-# In[12]:
+# In[ ]:
 
 
 print('Creating NN Model')
 _NUM_HIDDEN_UNITS = 1024
-model = Sequential()
-model.add(Embedding(input_dim = num_unique_tokens,
-                    output_dim = _EMBEDDING_DIM,
-                    weights = [embeddings_matrix],
-                    trainable=False,
-                    name='word_embedding_layer', 
-                    input_length = _max_len_sentence))
-# Output will be [batch size, input_length, output_dim]
-model.add(Flatten())
-model.add(Dense(_NUM_HIDDEN_UNITS, activation='relu', name='hidden_layer'))
-model.add(Dropout(rate=0.1, name='dropout_layer'))
-model.add(Dense(1, activation = 'sigmoid', name = 'output_layer'))
-model.summary()
 
-
-# In[13]:
-
-
-model.compile(loss='binary_crossentropy',
+def create_nn_model(activation_fn, dropout_rate, reg_param):
+    print(f'Activation: {activation_fn}')
+    print(f'DropoutRate: {dropout_rate}')
+    print(f'RegParam: {reg_param}')
+    model = Sequential()
+    model.add(Embedding(input_dim = num_unique_tokens,
+                        output_dim = _EMBEDDING_DIM,
+                        weights = [embeddings_matrix],
+                        trainable=False,
+                        name='word_embedding_layer', 
+                        input_length = _max_len_sentence))
+    # Output will be [batch size, input_length, output_dim]
+    model.add(Flatten())
+    model.add(Dense(_NUM_HIDDEN_UNITS,
+                    activation='relu',
+                    kernel_regularizer = l2(reg_param),
+                    name='hidden_layer'))
+    model.add(Dropout(rate=0.1, name='dropout_layer'))
+    model.add(Dense(1, activation = 'sigmoid', name = 'output_layer'))
+    model.summary()
+    model.compile(loss='binary_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
+    return model
 
 
-# In[14]:
+# In[ ]:
 
 
 _N_EPOCHS = 10
 _BATCH_SIZE = 32
 
+from collections import OrderedDict
+hyperparameters = OrderedDict()
+hyperparameters['activation_fn'] = ['sigmoid', 'tanh', 'relu']
+hyperparameters['dropout_rate'] = [0, 0.1, 0.3, 0.5]
+hyperparameters['reg_param'] = [0, 0.1, 0.01, 0.001]
 
-# In[15]:
+selected_hyperparam = {values[0] for hyp, values in hyperparameters.items()}
 
 
-print('Training Model')
-es = EarlyStopping(monitor='val_acc', mode = 'max', baseline = 0.75, patience = 2, verbose=1)
+# In[ ]:
+
+
+print('Hyperparam Sequential Search')
+for hyperparam, values in hyperparameters.items():
+    best_value_valacc_seen_so_far = [None, -1]
+    for value in values:
+        print(f'Hyperparam: {hyperparam}, Value: {value}')
+        es = EarlyStopping(monitor='val_acc', mode = 'max', patience = 2, verbose=1)
+        passed_hyperparam = copy(selected_hyperparam)
+        passed_hyperparam[hyperparam] = value
+        model = create_nn_model(**passed_hyperparam)
+        model.fit(X_train, y_train,
+                  batch_size = _BATCH_SIZE,
+                  epochs = _N_EPOCHS,
+                  validation_data = (X_val, y_val),
+                  callbacks=[es])
+        _, val_acc = model.evaluate(X_val, y_val)
+        if val_acc > best_value_valacc_seen_so_far[1]:
+            best_value_valacc_seen_so_far[0] = value
+            best_value_valacc_seen_so_far[1] = val_acc
+    selected_hyperparam[hyperparam] = best_value_valacc_seen_so_far[0]
+
+print(f'Selected Hyperparameters: {selected_hyperparam}')        
+
+
+# In[ ]:
+
+
+print('Retraining Best Model With Selected Hyperparam')
+model = create_nn_model(**selected_hyperparam)
 model.fit(X_train, y_train,
           batch_size = _BATCH_SIZE,
           epochs = _N_EPOCHS,
@@ -122,7 +164,7 @@ model.fit(X_train, y_train,
 # In[ ]:
 
 
-print('Testing Model')
+print('Testing Best Model')
 loss_acc = model.evaluate(X_test, y_test)
 print(f'Test Accuracy: {loss_acc[1]}')
 
