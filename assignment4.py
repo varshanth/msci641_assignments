@@ -19,7 +19,7 @@ from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
 from tensorflow.keras.regularizers import l2
 from sklearn.model_selection import GridSearchCV
 from copy import copy
- 
+
 _POS_REV_FILE = 'dataset/pos.txt'
 _NEG_REV_FILE = 'dataset/neg.txt'
 _WORD2VEC_EMBEDDING = 'dataset/word2vec_embeddings.kv'
@@ -72,7 +72,7 @@ for word, i in tokenizer.word_index.items(): # i=0 is the embedding for the zero
         embeddings_vector = None
     if embeddings_vector is not None:
         embeddings_matrix[i] = embeddings_vector
-        
+
 del word2vec_embeddings
 
 
@@ -91,7 +91,7 @@ def create_nn_model(activation_fn, dropout_rate, reg_param):
                         output_dim = _EMBEDDING_DIM,
                         weights = [embeddings_matrix],
                         trainable=False,
-                        name='word_embedding_layer', 
+                        name='word_embedding_layer',
                         input_length = _max_len_sentence))
     # Output will be [batch size, input_length, output_dim]
     model.add(Flatten())
@@ -120,7 +120,7 @@ hyperparameters['activation_fn'] = ['sigmoid', 'tanh', 'relu']
 hyperparameters['dropout_rate'] = [0, 0.1, 0.3, 0.5]
 hyperparameters['reg_param'] = [0, 0.1, 0.01, 0.001]
 
-selected_hyperparam = {values[0] for hyp, values in hyperparameters.items()}
+selected_hyperparam = {hyp:values[0] for hyp, values in hyperparameters.items()}
 
 
 # In[ ]:
@@ -146,7 +146,7 @@ for hyperparam, values in hyperparameters.items():
             best_value_valacc_seen_so_far[1] = val_acc
     selected_hyperparam[hyperparam] = best_value_valacc_seen_so_far[0]
 
-print(f'Selected Hyperparameters: {selected_hyperparam}')        
+print(f'Selected Hyperparameters: {selected_hyperparam}')
 
 
 # In[ ]:
