@@ -14,6 +14,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Input, Dense, Embedding, Dropout, Flatten, Activation
 from tensorflow.keras.preprocessing.text import text_to_word_sequence, Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.callbacks import EarlyStopping
  
 _POS_REV_FILE = 'dataset/pos.txt'
 _NEG_REV_FILE = 'dataset/neg.txt'
@@ -110,10 +111,12 @@ _BATCH_SIZE = 32
 
 
 print('Training Model')
+es = EarlyStopping(monitor='val_acc', mode = 'max', baseline = 0.75, patience = 2, verbose=1)
 model.fit(X_train, y_train,
           batch_size = _BATCH_SIZE,
           epochs = _N_EPOCHS,
-          validation_data = (X_val, y_val))
+          validation_data = (X_val, y_val),
+          callbacks=[es])
 
 
 # In[ ]:
