@@ -121,7 +121,7 @@ hyperparameters['dropout_rate'] = [0, 0.1, 0.3, 0.5]
 hyperparameters['reg_param'] = [0, 0.1, 0.01, 0.001]
 
 selected_hyperparam = {hyp:values[0] for hyp, values in hyperparameters.items()}
-
+best_model = None
 
 # In[ ]:
 
@@ -139,11 +139,14 @@ for hyperparam, values in hyperparameters.items():
                   batch_size = _BATCH_SIZE,
                   epochs = _N_EPOCHS,
                   validation_data = (X_val, y_val),
-                  callbacks=[es])
+                  callbacks=[es],
+                  verbose = 0)
         _, val_acc = model.evaluate(X_val, y_val)
         if val_acc > best_value_valacc_seen_so_far[1]:
             best_value_valacc_seen_so_far[0] = value
             best_value_valacc_seen_so_far[1] = val_acc
+            best_model = model
+        del model
     selected_hyperparam[hyperparam] = best_value_valacc_seen_so_far[0]
 
 print(f'Selected Hyperparameters: {selected_hyperparam}')
@@ -151,7 +154,7 @@ print(f'Selected Hyperparameters: {selected_hyperparam}')
 
 # In[ ]:
 
-
+'''
 print('Retraining Best Model With Selected Hyperparam')
 model = create_nn_model(**selected_hyperparam)
 model.fit(X_train, y_train,
@@ -160,11 +163,11 @@ model.fit(X_train, y_train,
           validation_data = (X_val, y_val),
           callbacks=[es])
 
-
+'''
 # In[ ]:
 
 
 print('Testing Best Model')
-loss_acc = model.evaluate(X_test, y_test)
+loss_acc = best_model.evaluate(X_test, y_test)
 print(f'Test Accuracy: {loss_acc[1]}')
 
