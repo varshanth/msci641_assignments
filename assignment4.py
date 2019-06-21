@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
 from gensim import models
 from lib.amazon_reviews_loader import AmazonReviewsDS
 from lib.amazon_reviews_cfg import DS_CFG_NO_SW, DS_CFG_SW
@@ -27,20 +24,8 @@ _MAX_VOCAB_SIZE = 20000
 _EMBEDDING_DIM = 300
 
 
-# In[ ]:
-
-
 amazon_rev_sw = AmazonReviewsDS(_POS_REV_FILE, _NEG_REV_FILE, DS_CFG_SW)
-
-
-# In[ ]:
-
-
 _max_len_sentence = int(np.percentile([len(rev) for rev in amazon_rev_sw.data], 90))
-
-
-# In[ ]:
-
 
 print('Fitting Tokenizer on Dataset')
 tokenizer = Tokenizer(num_words = _MAX_VOCAB_SIZE)
@@ -48,17 +33,9 @@ tokenizer.fit_on_texts([' '.join(rev[:_max_len_sentence]) for rev in amazon_rev_
 X = tokenizer.texts_to_sequences([' '.join(rev[:_max_len_sentence]) for rev in amazon_rev_sw.data])
 X = pad_sequences(X, maxlen=_max_len_sentence, padding='post', truncating='post')
 
-
-# In[ ]:
-
-
 print('Splitting Dataset into Train, Val & Test')
 X_train, X_val_test, y_train, y_val_test = train_test_split(X, amazon_rev_sw.labels, random_state=10, test_size=0.2)
 X_val, X_test, y_val, y_test = train_test_split(X_val_test, y_val_test, random_state=10, test_size=0.5)
-
-
-# In[ ]:
-
 
 print('Creating local embeddings matrix from Word2Vec Embeddings')
 word2vec_embeddings = models.KeyedVectors.load(_WORD2VEC_EMBEDDING, mmap='r')
@@ -76,12 +53,7 @@ for word, i in tokenizer.word_index.items(): # i=0 is the embedding for the zero
 del word2vec_embeddings
 
 
-# In[ ]:
-
-
-print('Creating NN Model')
 _NUM_HIDDEN_UNITS = 1024
-
 def create_nn_model(activation_fn, dropout_rate, reg_param):
     print(f'Activation: {activation_fn}')
     print(f'DropoutRate: {dropout_rate}')
@@ -107,13 +79,10 @@ def create_nn_model(activation_fn, dropout_rate, reg_param):
               metrics=['accuracy'])
     return model
 
-
-# In[ ]:
-
-
 _N_EPOCHS = 10
 _BATCH_SIZE = 32
 
+print('Creating Hyperparameter Sequential Search Grid')
 from collections import OrderedDict
 hyperparameters = OrderedDict()
 hyperparameters['activation_fn'] = ['sigmoid', 'tanh', 'relu']
@@ -123,10 +92,8 @@ hyperparameters['reg_param'] = [0, 0.1, 0.01, 0.001]
 selected_hyperparam = {hyp:values[0] for hyp, values in hyperparameters.items()}
 best_model = None
 
-# In[ ]:
-
-
-print('Hyperparam Sequential Search')
+print('Executing Hyperparam Sequential Search')
+print('----------------------------------------')
 for hyperparam, values in hyperparameters.items():
     best_value_valacc_seen_so_far = [None, -1]
     for value in values:
@@ -142,6 +109,7 @@ for hyperparam, values in hyperparameters.items():
                   callbacks=[es],
                   verbose = 0)
         _, val_acc = model.evaluate(X_val, y_val)
+        print(f'Validation Accuracy: {val_acc}')
         if val_acc > best_value_valacc_seen_so_far[1]:
             best_value_valacc_seen_so_far[0] = value
             best_value_valacc_seen_so_far[1] = val_acc
@@ -149,10 +117,10 @@ for hyperparam, values in hyperparameters.items():
         del model
     selected_hyperparam[hyperparam] = best_value_valacc_seen_so_far[0]
 
+print('----------------------------------------')
 print(f'Selected Hyperparameters: {selected_hyperparam}')
+print('----------------------------------------')
 
-
-# In[ ]:
 
 '''
 print('Retraining Best Model With Selected Hyperparam')
@@ -164,10 +132,9 @@ model.fit(X_train, y_train,
           callbacks=[es])
 
 '''
-# In[ ]:
-
 
 print('Testing Best Model')
 loss_acc = best_model.evaluate(X_test, y_test)
 print(f'Test Accuracy: {loss_acc[1]}')
+print('----------------------------------------')
 
