@@ -1,5 +1,26 @@
-# MSCi 641: Text Analytics Assignment 3
+# MSCi 641: Text Analytics Assignment 4
+
+# Results Over 3 Runs
+
+| Activation Fn | Trial 1 | Trial 2 | Trial 3 |
+| ------------- |---------|---------|---------|
+| Sigmoid       | 0.77037 | 0.77111 | 0.77133 |
+| Tanh          | 0.77364 | 0.77217 | 0.76618 |
+| ReLU          | 0.76818 | 0.77427 | 0.76482 |
+
+| Dropout Rate  | Trial 1 | Trial 2 | Trial 3 |
+| ------------- |---------|---------|---------|
+| 0.0           | 0.77107 | 0.77393 | 0.77192 |
+| 0.1           | 0.77111 | 0.77192 | 0.77268 |
+| 0.3           | 0.77096 | 0.77438 | 0.77157 |
+| 0.5           | 0.77020 | 0.77351 | 0.77232 |
+
+| Regularization Param | Trial 1 | Trial 2 | Trial 3 |
+| -------------------- |---------|---------|---------|
+| 0                    | 0.76894 | 0.76833 | 0.77184 |
+| 0.1                  | 0.67628 | 0.68557 | 0.68928 |
+| 0.01                 | 0.71403 | 0.71982 | 0.71747 |
+| 0.001                | 0.74657 | 0.74616 | 0.74610 |
+
 
 # Observations & Analysis
-
-1) For the most part, the words similar to "good" are positive and the words similar to "bad" are negative. In some cases, more particularly in the negative cases, we see a few (1-3) words which are actually positive. After further inspection of the actual data, we can see that these are actually due to the NEGATION of the positive words being used in negative reviews and in some cases, vice versa i.e. NEGATION of the negative words being used in positive reviews. For example:"not bad" which is positive and "not good" which is negative. There are cases where there are overlaps between the words in both positive and negative reviews, which we can safely conclude are "neutral" words like "okay"and "alright".

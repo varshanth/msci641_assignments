@@ -1,0 +1,309 @@
+[nltk_data] Downloading package stopwords to /root/nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+----- Dataset Synthesis Start -----
+Loading Positive Reviews from dataset/pos.txt
+Loading Negative Reviews from dataset/neg.txt
+Generating data and labels
+Tokenizing the data
+Shuffling the data
+----- Dataset Synthesis Complete -----
+Fitting Tokenizer on Dataset
+Splitting Dataset into Train, Val & Test
+Creating local embeddings matrix from Word2Vec Embeddings
+/usr/local/lib/python3.6/dist-packages/smart_open/smart_open_lib.py:398: UserWarning: This function is deprecated, use smart_open.open instead. See the migration notes for details: https://github.com/RaRe-Technologies/smart_open/blob/master/README.rst#migrating-to-the-new-open-function
+  'See the migration notes for details: %s' % _MIGRATION_NOTES_URL
+WARNING: Logging before flag parsing goes to stderr.
+W0621 23:20:47.052635 140204376532864 deprecation.py:506] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/keras/initializers.py:119: calling RandomUniform.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+Creating Hyperparameter Sequential Search Grid
+Executing Hyperparam Sequential Search
+----------------------------------------
+Hyperparam: activation_fn, Value: sigmoid
+Activation: sigmoid
+DropoutRate: 0
+RegParam: 0
+W0621 23:20:47.871088 140204376532864 deprecation.py:506] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/init_ops.py:1251: calling VarianceScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+W0621 23:20:47.956205 140204376532864 deprecation.py:323] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/nn_impl.py:180: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+Model: "sequential"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten (Flatten)            (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00005: early stopping
+80000/80000 [==============================] - 4s 46us/sample - loss: 0.5117 - acc: 0.7704
+Validation Accuracy: 0.7703750133514404
+Hyperparam: activation_fn, Value: tanh
+Activation: tanh
+DropoutRate: 0
+RegParam: 0
+Model: "sequential_1"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00005: early stopping
+80000/80000 [==============================] - 4s 46us/sample - loss: 0.5140 - acc: 0.7736
+Validation Accuracy: 0.7736499905586243
+Hyperparam: activation_fn, Value: relu
+Activation: relu
+DropoutRate: 0
+RegParam: 0
+Model: "sequential_2"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_2 (Flatten)          (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00005: early stopping
+80000/80000 [==============================] - 4s 48us/sample - loss: 0.5164 - acc: 0.7682
+Validation Accuracy: 0.7681875228881836
+Hyperparam: dropout_rate, Value: 0
+Activation: tanh
+DropoutRate: 0
+RegParam: 0
+Model: "sequential_3"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_3 (Flatten)          (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00006: early stopping
+80000/80000 [==============================] - 4s 49us/sample - loss: 0.5442 - acc: 0.7711
+Validation Accuracy: 0.7710750102996826
+Hyperparam: dropout_rate, Value: 0.1
+Activation: tanh
+DropoutRate: 0.1
+RegParam: 0
+Model: "sequential_4"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_4 (Flatten)          (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00005: early stopping
+80000/80000 [==============================] - 4s 49us/sample - loss: 0.5115 - acc: 0.7711
+Validation Accuracy: 0.7711125016212463
+Hyperparam: dropout_rate, Value: 0.3
+Activation: tanh
+DropoutRate: 0.3
+RegParam: 0
+Model: "sequential_5"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_5 (Flatten)          (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00005: early stopping
+80000/80000 [==============================] - 4s 49us/sample - loss: 0.5191 - acc: 0.7710
+Validation Accuracy: 0.7709624767303467
+Hyperparam: dropout_rate, Value: 0.5
+Activation: tanh
+DropoutRate: 0.5
+RegParam: 0
+Model: "sequential_6"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_6 (Flatten)          (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00005: early stopping
+80000/80000 [==============================] - 4s 50us/sample - loss: 0.5148 - acc: 0.7702
+Validation Accuracy: 0.7702000141143799
+Hyperparam: reg_param, Value: 0
+Activation: tanh
+DropoutRate: 0.1
+RegParam: 0
+Model: "sequential_7"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_7 (Flatten)          (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00006: early stopping
+80000/80000 [==============================] - 4s 49us/sample - loss: 0.5519 - acc: 0.7689
+Validation Accuracy: 0.7689499855041504
+Hyperparam: reg_param, Value: 0.1
+Activation: tanh
+DropoutRate: 0.1
+RegParam: 0.1
+Model: "sequential_8"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_8 (Flatten)          (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00005: early stopping
+80000/80000 [==============================] - 5s 56us/sample - loss: 0.6893 - acc: 0.6763
+Validation Accuracy: 0.6762874722480774
+Hyperparam: reg_param, Value: 0.01
+Activation: tanh
+DropoutRate: 0.1
+RegParam: 0.01
+Model: "sequential_9"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_9 (Flatten)          (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00003: early stopping
+80000/80000 [==============================] - 4s 54us/sample - loss: 0.6150 - acc: 0.7140
+Validation Accuracy: 0.7140374779701233
+Hyperparam: reg_param, Value: 0.001
+Activation: tanh
+DropoutRate: 0.1
+RegParam: 0.001
+Model: "sequential_10"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+word_embedding_layer (Embedd (None, 26, 300)           24066300
+_________________________________________________________________
+flatten_10 (Flatten)         (None, 7800)              0
+_________________________________________________________________
+hidden_layer (Dense)         (None, 1024)              7988224
+_________________________________________________________________
+dropout_layer (Dropout)      (None, 1024)              0
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 1025
+=================================================================
+Total params: 32,055,549
+Trainable params: 7,989,249
+Non-trainable params: 24,066,300
+_________________________________________________________________
+Epoch 00003: early stopping
+80000/80000 [==============================] - 4s 55us/sample - loss: 0.5517 - acc: 0.7466
+Validation Accuracy: 0.7465749979019165
+----------------------------------------
+Selected Hyperparameters: {'activation_fn': 'tanh', 'dropout_rate': 0.1, 'reg_param': 0}
+----------------------------------------
+Testing Best Model
+80000/80000 [==============================] - 4s 48us/sample - loss: 0.5516 - acc: 0.7702
+Test Accuracy: 0.7702375054359436
+----------------------------------------
