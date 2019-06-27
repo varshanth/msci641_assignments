@@ -24,3 +24,10 @@
 
 
 # Observations & Analysis
+
+1) As we can see from the results, changing the activation function had little to no effect across the trials of the experiment. I hypothesize that this is expected due to the lack of depth of the constructed neural network. It is known that the hyperbolic activation functions suffer from the vanishing gradient problem (here it is to be noted that sigmoid is just a rescaled tanh). The max value of the derivative of sigmoid is 0.25 of the original sigmoid value. Since ReLU does not suffer
+from the vanishing gradient problem (its derivative is either 0 or 1), it is used as the popular activation function in deep networks. Since the network we constructed has only 1 hidden layer, all the activation functions are expected to perform roughly the same as the gradients are strong enough when they reach the weights to be updated.
+
+2) I have used 1024 units in the hidden layer. As we can see, dropout rate of 0 - 0.5 have no visible effect on the result. This means that the hidden layer can do well given that at max 50% of the units have been dropped randomly during training. We can infer from this that having 1024 units in the hidden layer is extraneous and can be reduced without causing a significant reduction in the accuracy.
+
+3) We can see that adding L2 regularization with varying regularization parameter degrades performance significantly.
