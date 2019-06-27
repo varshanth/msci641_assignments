@@ -30,4 +30,5 @@ from the vanishing gradient problem (its derivative is either 0 or 1), it is use
 
 2) I have used 1024 units in the hidden layer. As we can see, dropout rate of 0 - 0.5 have no visible effect on the result. This means that the hidden layer can do well given that at max 50% of the units have been dropped randomly during training. We can infer from this that having 1024 units in the hidden layer is extraneous and can be reduced without causing a significant reduction in the accuracy.
 
-3) We can see that adding L2 regularization with varying regularization parameter degrades performance significantly.
+3) We can see that adding L2 regularization with varying regularization parameter degrades performance significantly. I hypothesize that since the neural network is not deep, the search space for the optimal weights is very small and hence the loss function landscape would have only a small set of good local minimas. The model is able to learn the optimal set of weights to converge to one of the few local minimas. This is called having low variance and is a desirable property of a
+model. L2 regularization would heavily penalize higher weight values, hence discouraging the model to converge to one of the few local minimas which exist. We confirm this by observing the trend that when we reduce the regularization parameter, the accuracy increases.
